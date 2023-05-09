@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using NpgsqlTypes;
@@ -35,9 +36,14 @@ public static class Program
 
         var persistence = configuration.UsePersistence<SqlPersistence>();
         persistence.EnableTransactionalSession();
-        persistence.ConnectionBuilder(() => new NpgsqlConnection("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres"));
-        var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
-        dialect.JsonBParameterModifier(parameter => ((NpgsqlParameter)parameter).NpgsqlDbType = NpgsqlDbType.Jsonb);
+        // SQL Server
+        persistence.ConnectionBuilder(() => new SqlConnection("Server=localhost,1434;User Id=SA;Password=yourStrong(1)Password;Encrypt=false;Initial Catalog=master;"));
+        var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();
+        
+        // PostGres
+        // persistence.ConnectionBuilder(() => new NpgsqlConnection("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres"));
+        // var dialect = persistence.SqlDialect<SqlDialect.PostgreSql>();
+        // dialect.JsonBParameterModifier(parameter => ((NpgsqlParameter)parameter).NpgsqlDbType = NpgsqlDbType.Jsonb);
 
         // Start endpoint
         var services = new ServiceCollection();

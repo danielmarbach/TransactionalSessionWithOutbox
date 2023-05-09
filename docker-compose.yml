@@ -1,5 +1,5 @@
 services:
-  db:
+  postgres:
     image: postgres
     ports:
       - "5432:5432"
@@ -7,3 +7,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+  mssql:
+    image: mcr.microsoft.com/mssql/server:latest
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(1)Password
